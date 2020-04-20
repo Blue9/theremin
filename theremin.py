@@ -1,38 +1,41 @@
 import pyaudio
 import numpy as np
 import sys
-
-def get_note():
-    return int(sys.argv[1])
-
-def get_frequency(tuning=0):
-    note = get_note()
-    return ((2 ** (1. / 12)) ** (note - 9 + tuning)) * 440
-
-def get_volume():
-    return 0.5 if len(sys.argv) < 2 else float(sys.argv[2])
-
-def quit():
-    stream.stop_stream()
-    stream.close()
-    p.terminate()
+import time
 
 
-if __name__ == "__main__":
+class Theremin:
+    def __init__(self):
+        self.p = pyaudio.PyAudio()
+        self.calibration = (5, 10)  # location
+        self.sampling_rate = 16000
+        self.stream = self.p.open(format=pyaudio.paFloat32,
+                                  channels=1,
+                                  rate=self.sampling_rate,
+                                  output=True)
 
-    frequency = get_frequency()
-    volume = get_volume()
+    def play(self, frequency=261.6, volume=0.5, duration=5.0):  # 261.6 is middle C
+        data = np.arange(self.sampling_rate * duration)
+        sound = np.sin(2 * np.pi * data * frequency /
+                       self.sampling_rate).astype(np.float32)
+        self.stream.write(volume * sound)
 
-    p = pyaudio.PyAudio()
-    sampling_rate = 44100
-    duration = 1.0
+    def get_frequency(self, base_note=261.6, semitones=0):
+        return 2 ** (semitones / 12) * base_note
 
-    sound = (np.sin(2*np.pi*np.arange(sampling_rate*duration)*frequency/sampling_rate)).astype(np.float32)
-    stream = p.open(format=pyaudio.paFloat32,
-                channels=1,
-                rate=sampling_rate,
-                output=True)
 
-    stream.write(volume * sound)
-    
-    quit()
+    def shutdown(self):
+        self.stream.stop_stream()
+        self.stream.close()
+        self.p.terminate()
+
+
+if __name__ == '__main__':
+    theremin = Theremin()
+    input_data = sys.argv[1:]
+    for item in input_data:
+        frequency = theremin.get_frequency(semitones=int(item[0]))
+        duration = len(item)
+        theremin.play(frequency=frequency, duration=duration)
+        time.sleep(0.5 * duration)
+    theremin.shutdown()
