@@ -1,4 +1,6 @@
-PyAudio
+### PyAudio ###
+# sudo apt-get install python-pyaudio #
+
 Numpy
 
 ### Vl53l1x sensor information ###

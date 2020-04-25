@@ -65,7 +65,7 @@ def handle_control():
     global TONE
     global RUNNING
     while RUNNING:
-        control = input()
+        control = raw_input()
         if control == 'w':
             VOLUME = min(VOLUME + 0.1, 1)
         elif control == 's':
@@ -79,6 +79,7 @@ def handle_control():
 
 
 if __name__ == '__main__':
+    theremin = Theremin()
     print('''Commands (press enter after entering the command):
     increase volume - w
     decrease volume - s
@@ -86,7 +87,7 @@ if __name__ == '__main__':
     decrease pitch - d
     quit - q
     ''')
-    theremin = Theremin()
+    
     thread = threading.Thread(target=handle_control)
     thread.daemon = True
     thread.start()
