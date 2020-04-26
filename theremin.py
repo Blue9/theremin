@@ -10,6 +10,7 @@ import pyaudio
 VOLUME = 0.5
 TONE = 0
 RUNNING = True
+COUNT = 0
 
 
 class Theremin:
@@ -37,6 +38,8 @@ class Theremin:
         tone_generator = tone_gen()
 
         def callback(in_data, frame_count, time_info, status):
+            global COUNT
+            COUNT += 1
             status = pyaudio.paContinue if RUNNING else pyaudio.paComplete
             data = itertools.islice(tone_generator, frame_count)
             return np.asarray(list(data)).astype(np.float32), status
@@ -65,7 +68,7 @@ def handle_control():
     global TONE
     global RUNNING
     while RUNNING:
-        control = raw_input()
+        control = input()
         if control == 'w':
             VOLUME = min(VOLUME + 0.1, 1)
         elif control == 's':
@@ -91,5 +94,7 @@ if __name__ == '__main__':
     thread = threading.Thread(target=handle_control)
     thread.daemon = True
     thread.start()
+    start = time.time()
     theremin.play()
+    print(COUNT, COUNT / (time.time() - start))
     theremin.shutdown()
