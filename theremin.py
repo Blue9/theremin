@@ -5,7 +5,7 @@ import time
 
 import numpy as np
 import pyaudio
-
+import sensor
 
 VOLUME = 0.5
 TONE = 0
@@ -16,7 +16,7 @@ class Theremin:
     def __init__(self):
         self.p = pyaudio.PyAudio()
         self.calibration = (5, 10)  # location
-        self.sampling_rate = 48000
+        self.sampling_rate = 44100
         self.chunk_size = 1024
         self.stream = None
 
@@ -25,8 +25,6 @@ class Theremin:
             sample_index = 0
             phase = 0
             while RUNNING:
-                # sound = np.sin(2 * np.pi * sample_index *
-                #                self.get_frequency(TONE) / self.sampling_rate).astype(np.float32)
                 f = self.get_frequency(TONE)
                 t_start = sample_index * self.chunk_size
                 phase_delta = 2 * np.pi * f / self.sampling_rate
@@ -71,26 +69,22 @@ def handle_control():
     global VOLUME
     global TONE
     global RUNNING
+    s1 = sensor.get_sensor()
     while RUNNING:
-        control = input()
-        if control == 'w':
-            VOLUME = min(VOLUME + 0.1, 1)
-        elif control == 's':
-            VOLUME = max(VOLUME - 0.1, 0)
-        elif control == 'a':
-            TONE -= 1
-        elif control == 'd':
-            TONE += 1
-        elif control == 'q':
-            RUNNING = False
-
+        distance = sensor.get_distance(s1)
+        if distance > 300:
+            TONE = 0
+        elif distance < 60:
+            TONE = 12
+        else:
+            TONE = int((300 - distance) / 240 * 12)
 
 if __name__ == '__main__':
     print('''Commands (press enter after entering the command):
     increase volume - w
     decrease volume - s
-    increase pitch - a
-    decrease pitch - d
+    increase pitch - move closer to sensor
+    decrease pitch - move farther from sensor
     quit - q
     ''')
     theremin = Theremin()
