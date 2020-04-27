@@ -16,7 +16,7 @@ class Theremin:
     def __init__(self):
         self.p = pyaudio.PyAudio()
         self.calibration = (5, 10)  # location
-        self.sampling_rate = 44100
+        self.sampling_rate = 16000
         self.stream = None
 
     def play(self):  # 261.6 is middle C
