@@ -16,7 +16,7 @@ class Theremin:
     def __init__(self):
         self.p = pyaudio.PyAudio()
         self.calibration = (5, 10)  # location
-        self.sampling_rate = 16000
+        self.sampling_rate = 48000
         self.stream = None
 
     def play(self):  # 261.6 is middle C
@@ -26,19 +26,18 @@ class Theremin:
                 # sound = np.sin(2 * np.pi * sample_index *
                 #                self.get_frequency(TONE) / self.sampling_rate).astype(np.float32)
                 f = self.get_frequency(TONE)
-                t = sample_index / self.sampling_rate
+                t = np.arange(sample_index, sample_index+1024) / self.sampling_rate
                 sound = (f * t) - np.floor(f * t)
-                if int(2 * f * t % 2) == 1:
-                    sound = 1 - sound
+                sound[2*f*t % 2 >= 1] = 1 - sound[2*f*t%2 >= 1]
                 sound -= 0.25
                 sound *= 4
-                sample_index += 1
+                sample_index += 1024
                 yield sound * VOLUME
         tone_generator = tone_gen()
 
         def callback(in_data, frame_count, time_info, status):
             status = pyaudio.paContinue if RUNNING else pyaudio.paComplete
-            data = itertools.islice(tone_generator, frame_count)
+            data = next(tone_generator)
             return np.asarray(list(data)).astype(np.float32), status
 
         self.stream = self.p.open(format=pyaudio.paFloat32,
