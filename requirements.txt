@@ -1,0 +1,9 @@
+PyAudio
+Numpy
+
+### Vl53l1x sensor information ###
+### https://github.com/pimoroni/vl53l1x-python ###
+#
+
+smbus2
+vl53l1x
