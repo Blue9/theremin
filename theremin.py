@@ -23,17 +23,22 @@ class Theremin:
     def play(self):  # 261.6 is middle C
         def tone_gen():
             sample_index = 0
+            phase = 0
             while RUNNING:
                 # sound = np.sin(2 * np.pi * sample_index *
                 #                self.get_frequency(TONE) / self.sampling_rate).astype(np.float32)
                 f = self.get_frequency(TONE)
                 t_start = sample_index * self.chunk_size
-                t = np.arange(t_start, t_start + self.chunk_size) / self.sampling_rate
-                sound = (f * t) - np.floor(f * t)
-                triangle_cutoff = 2 * f * t % 2 >= 1
-                sound[triangle_cutoff] = 1 - sound[triangle_cutoff]
-                sound -= 0.25
-                sound *= 4
+                phase_delta = 2 * np.pi * f / self.sampling_rate
+                x_vals = np.linspace(phase, phase + phase_delta * self.chunk_size, self.chunk_size, endpoint=False)
+                sound = np.sin(x_vals).astype(np.float32)
+                phase = (phase + phase_delta * self.chunk_size) % (2 * np.pi)
+
+                # sound = (f * t) - np.floor(f * t)
+                # triangle_cutoff = 2 * f * t % 2 >= 1
+                # sound[triangle_cutoff] = 1 - sound[triangle_cutoff]
+                # sound -= 0.25
+                # sound *= 4
                 sample_index += 1
                 yield sound * VOLUME
         tone_generator = tone_gen()
