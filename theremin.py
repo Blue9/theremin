@@ -36,7 +36,7 @@ class Theremin:
                 sample_index += 1
                 yield sound * VOLUME
         tone_generator = tone_gen()
-
+        
         def callback(in_data, frame_count, time_info, status):
             status = pyaudio.paContinue if RUNNING else pyaudio.paComplete
             data = next(tone_generator)
@@ -65,15 +65,24 @@ def handle_control():
     global VOLUME
     global TONE
     global RUNNING
-    s1 = sensor.get_sensor()
+    pitch_control = sensor.get_sensor(0x30)
+    volume_control = sensor.get_sensor()
     while RUNNING:
-        distance = sensor.get_distance(s1)
-        if distance > 300:
+        pitch_distance = sensor.get_distance(pitch_control)
+        volume_distance = sensor.get_distance(volume_control)
+        if pitch_distance > 300:
             TONE = 0
-        elif distance < 60:
+        elif pitch_distance < 60:
             TONE = 12
         else:
-            TONE = int((300 - distance) / 240 * 12)
+            TONE = int((300 - pitch_distance) / 240 * 12)
+        
+        if volume_distance > 300:
+            VOLUME = 0
+        elif volume_distance < 60:
+            VOLUME = 1
+        else:
+            VOLUME = (300 - volume_distance) / 240 
 
 if __name__ == '__main__':
     print('''Commands (press enter after entering the command):
