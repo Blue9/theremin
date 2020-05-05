@@ -1,9 +1,10 @@
-Run this: python3 theremin.py 
+Install pyo: pip install pyo
 
-HW Connections:
-The SHUT pin on one of the VL53LX sensors is connected to BCM pin 17. This pin is an active low, so when GPIO 17 outputs 0, the connected board powers off. 
-In sensor.py, we use this feature to write to a single board and change its address. Then, we set GPIO 17 high and leave that sensor on its original address.
+Run synth.py in one Terminal tab. This plays audio.
 
-Note: The current implementation will cannot be run multiple times yet without unplugging the sensor's power. This is because the sensors will have their new I2C addresses flashed from the perious time that theremin.py was run. 
+Run control.py in another Terminal tab. This lets you control the pitch.
 
+Change pitch: drag slider.
 
+Change sound: in the windo opened by synth.py, click on the interpreter text
+box, and enter looper.setTable(SndTable('synth2.wav')) or looper.setTable(SndTable('synth.wav')).
