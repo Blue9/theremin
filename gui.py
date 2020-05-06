@@ -9,13 +9,12 @@ Config.set('graphics', 'width', 320)
 Config.set('graphics', 'height', 240)
 
 Builder.load_string("""
-#: import FadeTransition kivy.uix.screenmanager.FadeTransition
-#: import RiseInTransition kivy.uix.screenmanager.RiseInTransition
+#: import NoTransition kivy.uix.screenmanager.NoTransition
 
 <MenuScreen>:
     BoxLayout:
-        size_hint: [0.9, 0.9]
-        pos_hint: { 'top' : .95, 'right': .95}
+        #size_hint: [0.9, 0.9]
+        #pos_hint: { 'top' : .95, 'right': .95}
         orientation: 'vertical'
         Label:
             size_hint: [1, 2]
@@ -24,7 +23,7 @@ Builder.load_string("""
         Button:
             text: 'Tune'
             on_press:
-                root.manager.transition = RiseInTransition(duration=0.1)
+                root.manager.transition = NoTransition()
                 root.manager.current = 'tune'
         Button:
             text: 'Quit'
@@ -76,7 +75,7 @@ Builder.load_string("""
         Button:
             text: 'Back'
             on_press:
-                root.manager.transition = FadeTransition(duration=0.1)
+                root.manager.transition = NoTransition()
                 root.manager.current = 'menu'
 """)
 
