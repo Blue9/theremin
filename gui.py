@@ -11,21 +11,32 @@ Config.set('graphics', 'height', 240)
 Builder.load_string("""
 #: import NoTransition kivy.uix.screenmanager.NoTransition
 
+<LLabel@Label>:
+    font_size: '40px'
+    markup: True
+    bold: True
+
+<Butt@Button>:
+    font_size: '50px'
+    bold: True
+    markup: True
+
 <MenuScreen>:
     BoxLayout:
         #size_hint: [0.9, 0.9]
         #pos_hint: { 'top' : .95, 'right': .95}
         orientation: 'vertical'
-        Label:
+        font_size: '40sp'
+        LLabel:
             size_hint: [1, 2]
             text: 'Theremin 2.0'
-            font_size: '20sp'
-        Button:
+            font_size: '60px'
+        Butt:
             text: 'Tune'
             on_press:
                 root.manager.transition = NoTransition()
                 root.manager.current = 'tune'
-        Button:
+        Butt:
             text: 'Quit'
             on_press: app.stop()
 
@@ -33,7 +44,7 @@ Builder.load_string("""
     BoxLayout:
         orientation: 'vertical'
         BoxLayout:
-            Label:
+            LLabel:
                 text: 'Low pitch: ' + str(int(lps.value))
             Slider:
                 id: lps
@@ -43,7 +54,7 @@ Builder.load_string("""
                 step: 1
                 on_value: root.controller.pitch_low = self.value
         BoxLayout:
-            Label:
+            LLabel:
                 text: 'High pitch: ' + str(int(hps.value))
             Slider:
                 id: hps
@@ -53,7 +64,7 @@ Builder.load_string("""
                 step: 1
                 on_value: root.controller.pitch_high = self.value
         BoxLayout:
-            Label:
+            LLabel:
                 text: 'Max volume: ' + str(int(maxs.value))
             Slider:
                 id: maxs
@@ -63,7 +74,7 @@ Builder.load_string("""
                 step: 1
                 on_value: root.controller.vol_high = self.value
         BoxLayout:
-            Label:
+            LLabel:
                 text: 'Min volume: ' + str(int(mins.value))
             Slider:
                 id: mins
@@ -72,7 +83,7 @@ Builder.load_string("""
                 max: 400
                 step: 1
                 on_value: root.controller.vol_low = self.value
-        Button:
+        Butt:
             text: 'Back'
             on_press:
                 root.manager.transition = NoTransition()
