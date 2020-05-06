@@ -3,11 +3,11 @@ import time
 import RPi.GPIO as GPIO
 
 ADDR_1 = 17
-ADDR_2 = 27
+ADDR_2 = 22
 PITCH_SENSOR = None
 VOLUME_SENSOR = None
-ADDRESS_1 = 0x20
-ADDRESS_2 = 0x30
+ADDRESS_1 = 0x35
+ADDRESS_2 = 0x40
 TUNE = 1
 
 
@@ -46,11 +46,11 @@ def get_sensors():
     reset_sensor()
     
     enable_sensor(ADDR_1)
-    PITCH_SENSOR = qwiic_vl53l1x.QwiicVL53L1X(address=0x29)
+    PITCH_SENSOR = qwiic_vl53l1x.QwiicVL53L1X()
     PITCH_SENSOR.set_i2c_address(ADDRESS_1)
     
     enable_sensor(ADDR_2) 
-    VOLUME_SENSOR = qwiic_vl53l1x.QwiicVL53L1X(address=0x29)
+    VOLUME_SENSOR = qwiic_vl53l1x.QwiicVL53L1X()
     VOLUME_SENSOR.set_i2c_address(ADDRESS_2)
 
     setup_sensors()
