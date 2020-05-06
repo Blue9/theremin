@@ -1,10 +1,10 @@
 from pyo import *
 
-s = Server(duplex=1).boot()
+s = Server(duplex=0).boot()
 rec = OscReceive(port=9000, address=['/pitch'])
 rec.setValue("/pitch", 0.5)
 
-For continuous sounds (synths, leads)
+# For continuous sounds (synths, leads)
 table = SndTable('synth.wav')
 looper = Looper(table=table,
                 pitch=rec['/pitch'] * 2,

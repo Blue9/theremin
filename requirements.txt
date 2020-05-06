@@ -1,9 +1,14 @@
-PyAudio
-Numpy
-
-### Vl53l1x sensor information ###
-### https://github.com/pimoroni/vl53l1x-python ###
-#
-
-smbus2
-vl53l1x
+certifi==2020.4.5.1
+chardet==3.0.4
+docutils==0.16
+idna==2.9
+Kivy==1.11.1
+Kivy-Garden==0.1.4
+numpy==1.18.4
+Pillow==7.1.2
+Pygments==2.6.1
+pyo==1.0.1
+requests==2.23.0
+six==1.14.0
+urllib3==1.25.9
+wxPython==4.1.0
