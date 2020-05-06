@@ -17,6 +17,7 @@ class Controller:
         self.vol_high = 300
         self.running = True
         self.sound_file = 'synth1'
+        self.tune = 0.5     # call sensor.tune(self.tune)
 
     def update_sensors(self):
         send = OscDataSend(types='ffs',  # pitch, volume, sound_file

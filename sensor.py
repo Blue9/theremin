@@ -55,28 +55,29 @@ def get_sensors():
 
     setup_sensors()
 
-def tune():
+# t should be a value between 0.1 and 1
+def tune(t):
     global TUNE
-    TUNE = 1 if TUNE == 2 else 2
+    TUNE = t
 
 def get_pitch():
     global PITCH_SENSOR
     pitch_distance = PITCH_SENSOR.get_distance()
-    if pitch_distance > 300*TUNE:
+    if pitch_distance > 600*TUNE:
         return 0
     elif pitch_distance < 60:
         return 12
     else:
-        return int((300*TUNE - pitch_distance) / (300*TUNE - 60) * 12)
+        return int((600*TUNE - pitch_distance) / (600*TUNE - 60) * 12)
 
     return None
 
 def get_volume():
     global VOLUME_SENSOR
     volume_distance = VOLUME_SENSOR.get_distance()
-    if volume_distance > 300*TUNE:
+    if volume_distance > 600*TUNE:
         return 0
     elif volume_distance < 60:
         return 1
     else:
-        return (300*TUNE - volume_distance) / (300*TUNE - 60)
+        return (600*TUNE - volume_distance) / (600*TUNE - 60)
