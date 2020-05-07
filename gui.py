@@ -20,6 +20,10 @@ Builder.load_string("""
     font_size: '50px'
     bold: True
     markup: True
+    # background_color: (1, 2, 1, 1)
+
+<ReturnButt@Butt>:
+    background_color: (2, 0.5, 0.5, 1)
 
 <MenuScreen>:
     BoxLayout:
@@ -37,8 +41,13 @@ Builder.load_string("""
                 root.manager.transition = NoTransition()
                 root.manager.current = 'tune'
         Butt:
+            text: 'Select Sound'
+            on_press:
+                root.manager.transition = NoTransition()
+                root.manager.current = 'select_sound'
+        ReturnButt:
             text: 'Quit'
-            on_press: app.stop()
+            on_press: root.controller.running = False; app.stop()
 
 <TuneScreen>:
     BoxLayout:
@@ -51,7 +60,7 @@ Builder.load_string("""
                 min: 0
                 value: 300
                 max: 400
-                step: 1
+                step: 10
                 on_value: root.controller.pitch_low = self.value
         BoxLayout:
             LLabel:
@@ -61,7 +70,7 @@ Builder.load_string("""
                 min: 0
                 value: 60
                 max: 400
-                step: 1
+                step: 10
                 on_value: root.controller.pitch_high = self.value
         BoxLayout:
             LLabel:
@@ -71,7 +80,7 @@ Builder.load_string("""
                 min: 0
                 value: 300
                 max: 400
-                step: 1
+                step: 10
                 on_value: root.controller.vol_high = self.value
         BoxLayout:
             LLabel:
@@ -81,21 +90,55 @@ Builder.load_string("""
                 min: 0
                 value: 60
                 max: 400
-                step: 1
+                step: 10
                 on_value: root.controller.vol_low = self.value
-        Butt:
+        ReturnButt:
             text: 'Back'
             on_press:
                 root.manager.transition = NoTransition()
                 root.manager.current = 'menu'
+
+
+<SelectSoundScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        GridLayout:
+            size_hint: [1, 4]
+            cols: 2
+            Butt:
+                text: 'Synth 1'
+                on_press: root.controller.set_sound('synth1')
+            Butt:
+                text: 'Synth 2'
+                on_press: root.controller.set_sound('synth2')
+            Butt:
+                text: 'Bass'
+                on_press: root.controller.set_sound('bass')
+            Butt:
+                text: 'Lead'
+                on_press: root.controller.set_sound('lead')
+        ReturnButt:
+            text: 'Back'
+            on_press:
+                root.manager.transition = NoTransition()
+                root.manager.current = 'menu'
+
 """)
 
 
 class MenuScreen(Screen):
-    pass
+    def __init__(self, sensor_controller, **kwargs):
+        super().__init__(**kwargs)
+        self.controller = sensor_controller
 
 
 class TuneScreen(Screen):
+    def __init__(self, sensor_controller, **kwargs):
+        super().__init__(**kwargs)
+        self.controller = sensor_controller
+
+
+class SelectSoundScreen(Screen):
     def __init__(self, sensor_controller, **kwargs):
         super().__init__(**kwargs)
         self.controller = sensor_controller
@@ -108,11 +151,13 @@ class ThereminGUI(App):
 
     def build(self):
         sm = ScreenManager()
-        sm.add_widget(MenuScreen(name='menu'))
+        sm.add_widget(MenuScreen(self.sensor_controller, name='menu'))
         sm.add_widget(TuneScreen(self.sensor_controller, name='tune'))
+        sm.add_widget(SelectSoundScreen(self.sensor_controller, name='select_sound'))
         return sm
 
 
 if __name__ == '__main__':
     controller = Controller()
+    controller.main()
     ThereminGUI(controller).run()

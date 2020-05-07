@@ -80,5 +80,3 @@ def get_volume():
         return 1
     else:
         return (300*TUNE - volume_distance) / (300*TUNE - 60)
-
-

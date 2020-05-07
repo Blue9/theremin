@@ -1,13 +1,24 @@
 from pyo import *
 
 s = Server(duplex=0).boot()
-rec = OscReceive(port=9000, address=['/pitch'])
-rec.setValue("/pitch", 0.5)
+
+
+def callback(address, pitch, volume, sound_file):
+    looper.setPitch(pitch)
+    looper.setMul(volume)
+    looper.setTable(tables[sound_file])
+
+
+rec = OscDataReceive(port=9000, address='/data', function=callback)
 
 # For continuous sounds (synths, leads)
-table = SndTable('synth.wav')
-looper = Looper(table=table,
-                pitch=rec['/pitch'] * 2,
+tables = {
+    'synth1': SndTable('synth1.wav'),
+    'synth2': SndTable('synth2.wav'),
+    'bass': SndTable('808.wav')
+}
+looper = Looper(table=tables['synth1'],
+                pitch=1,
                 start=2,
                 dur=3,
                 xfade=67,
