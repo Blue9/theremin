@@ -11,15 +11,14 @@ class Controller:
     def __init__(self):
         self.s = Server(duplex=0).boot()
         self.s.start()
-        self.pitch_low = 300
-        self.pitch_high = 60
+        self.base_note = 261.6
         self.vol_low = 60
         self.vol_high = 300
         self.running = True
         self.sound_file = 'synth1'
         self.tune = 0.5     # call sensor.tune(self.tune)
 
-    def update_sensors(self):
+    def update(self):
         send = OscDataSend(types='ffs',  # pitch, volume, sound_file
                            port=9000,
                            address='/data',
@@ -35,11 +34,19 @@ class Controller:
         # sound is element of ['synth1', 'synth2', 'bass', 'lead']
         self.sound_file = sound
         pass
+    
+    def set_base_note(self, base_note):
+        self.base_note = base_note
+        pass
+
+    def set_tune(self, tune):
+        self.tune = tune
+        pass
 
     def main(self):
         # TODO in while loop, get sensor value, compute pitch and volume,
         # and send via OSC (add stuff from below to this)
-        thread = Thread(target=self.update_sensors)
+        thread = Thread(target=self.update)
         thread.start()
         # s.gui(locals())
 

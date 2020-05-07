@@ -92,6 +92,26 @@ Builder.load_string("""
                 max: 400
                 step: 10
                 on_value: root.controller.vol_low = self.value
+        BoxLayout:
+            LLabel:
+                text: 'Base Note: ' + str(int(bn.value))
+            Slider:
+                id: bn
+                min: 0
+                value: 261.6
+                max: 1000
+                step: self.value * 2 ** (1/12)
+                on_value: root.controller.set_base_note(self.value)
+        BoxLayout:
+            LLabel:
+                text: 'Tuning: ' + str(int(tune.value))
+            Slider:
+                id: tune
+                min: 0.1
+                value: 0.5
+                max: 1
+                step: 0.05
+                on_value: root.controller.set_tune(self.value)
         ReturnButt:
             text: 'Back'
             on_press:

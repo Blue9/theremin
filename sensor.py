@@ -3,12 +3,11 @@ import time
 import RPi.GPIO as GPIO
 
 ADDR_1 = 17
-ADDR_2 = 27
+ADDR_2 = 22
 PITCH_SENSOR = None
 VOLUME_SENSOR = None
 ADDRESS_1 = 0x20
 ADDRESS_2 = 0x30
-TUNE = 1
 
 
 GPIO.setmode(GPIO.BCM)
@@ -55,26 +54,28 @@ def get_sensors():
 
     setup_sensors()
 
-# t should be a value between 0.1 and 1
-def tune(t):
-    global TUNE
-    TUNE = t
 
-def get_pitch():
+def get_factor(semitones):
+    return 2 ** (semitones / 12)
+
+def get_pitch(controller):
     global PITCH_SENSOR
     pitch_distance = PITCH_SENSOR.get_distance()
+     
+    TUNE = controller.tune
     if pitch_distance > 600*TUNE:
-        return 0
+        return 1 * controller.base_note
     elif pitch_distance < 60:
-        return 12
+        return 2 * controller.base_note
     else:
-        return int((600*TUNE - pitch_distance) / (600*TUNE - 60) * 12)
+        semitones =  int((600*TUNE - pitch_distance) / (600*TUNE - 60) * 12)
+        return get_factor(semitones) * controller.base_note
 
-    return None
-
-def get_volume():
+def get_volume(controller):
     global VOLUME_SENSOR
     volume_distance = VOLUME_SENSOR.get_distance()
+
+    TUNE = controller.tune
     if volume_distance > 600*TUNE:
         return 0
     elif volume_distance < 60:
