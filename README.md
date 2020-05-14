@@ -1,3 +1,6 @@
+ISSUES:
+Pyo isn't working on Rohan's laptop (error: No module named 'pyo._pyo')
+
 Install pyo: pip install pyo
 
 Run synth.py in one Terminal tab. This plays audio.
