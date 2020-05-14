@@ -22,7 +22,7 @@ class Controller:
         send = OscDataSend(types='ffs',  # pitch, volume, sound_file
                            port=9000,
                            address='/data',
-                           host='127.0.0.1')
+                           host='172.30.9.118')
         sensor.get_sensors()
         while self.running:
             pitch = sensor.get_pitch(self)
@@ -45,11 +45,8 @@ class Controller:
         pass
 
     def main(self):
-        # TODO in while loop, get sensor value, compute pitch and volume,
-        # and send via OSC (add stuff from below to this)
         thread = Thread(target=self.update)
         thread.start()
-        # s.gui(locals())
 
 
 if __name__ == '__main__':
