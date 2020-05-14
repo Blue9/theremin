@@ -36,7 +36,8 @@ class Controller:
         pass
     
     def set_base_note(self, base_note):
-        self.base_note = base_note
+        middle_c = 261.63
+        self.base_note = middle_c * 2 ** (base_note - 4)
         pass
 
     def set_tune(self, tune):

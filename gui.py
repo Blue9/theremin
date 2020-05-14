@@ -94,17 +94,17 @@ Builder.load_string("""
                 on_value: root.controller.vol_low = self.value
         BoxLayout:
             LLabel:
-                text: 'Base Note: ' + str(int(bn.value))
+                text: 'Base C Note: C' + str(round(bcn.value))
             Slider:
-                id: bn
+                id: bcn
                 min: 0
-                value: 261.6
-                max: 1000
-                step: self.value * 2 ** (1/12)
+                value: 4
+                max: 10
+                step: 1 
                 on_value: root.controller.set_base_note(self.value)
         BoxLayout:
             LLabel:
-                text: 'Tuning: ' + str(int(tune.value))
+                text: 'Tune Setting: ' + str(tune.value)
             Slider:
                 id: tune
                 min: 0.1
