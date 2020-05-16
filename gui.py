@@ -1,3 +1,4 @@
+import sys
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.config import Config
@@ -94,24 +95,14 @@ Builder.load_string("""
                 on_value: root.controller.vol_low = self.value
         BoxLayout:
             LLabel:
-                text: 'Base C Note: C' + str(round(bcn.value))
+                text: 'Octave shift: ' + str(round(octave.value))
             Slider:
-                id: bcn
-                min: 0
-                value: 4
-                max: 10
+                id: octave
+                min: -2
+                value: 0
+                max: 2
                 step: 1 
-                on_value: root.controller.set_base_note(self.value)
-        BoxLayout:
-            LLabel:
-                text: 'Tune Setting: ' + str(tune.value)
-            Slider:
-                id: tune
-                min: 0.1
-                value: 0.5
-                max: 1
-                step: 0.05
-                on_value: root.controller.set_tune(self.value)
+                on_value: root.controller.octave_shift = self.value
         ReturnButt:
             text: 'Back'
             on_press:
@@ -178,6 +169,9 @@ class ThereminGUI(App):
 
 
 if __name__ == '__main__':
-    controller = Controller()
+    if len(sys.argv) < 2:
+        print('Usage: python3 gui.py host')
+    host = sys.argv[1]
+    controller = Controller(host=host)
     controller.main()
     ThereminGUI(controller).run()

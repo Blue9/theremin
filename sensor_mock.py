@@ -10,9 +10,6 @@ def setup_sensors():
 def get_sensors():
     pass
 
-def tune():
-    pass
-
 def get_pitch(controller):
     return controller.pitch_low / controller.pitch_high
 
