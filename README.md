@@ -1,5 +1,5 @@
-ISSUES:
-Pyo isn't working on Rohan's laptop (error: No module named 'pyo._pyo')
+Issue:
+Rohan's laptop and pi won't talk smhsmhsmh 
 
 Install pyo: pip install pyo
 
