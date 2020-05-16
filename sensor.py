@@ -12,6 +12,7 @@ class Sensor:
     def __init__(self, reset=False):
         self.pitch_sensor = None
         self.vol_sensor = None
+        self.init_sensors()
 
     def init_sensors(self, reset=False):
         if reset:
@@ -39,10 +40,9 @@ class Sensor:
     def enable_sensor(pin):
         GPIO.output(pin, 1)
 
-    @staticmethod
-    def setup_sensors():
-        Sensor._setup_sensor(Sensor.pitch_sensor)
-        Sensor._setup_sensor(Sensor.vol_sensor)
+    def setup_sensors(self):
+        Sensor._setup_sensor(self.pitch_sensor)
+        Sensor._setup_sensor(self.vol_sensor)
 
     @staticmethod
     def _setup_sensor(sensor):
@@ -56,7 +56,6 @@ class Sensor:
 
     def get_pitch(self, controller):
         pitch_distance = self.pitch_sensor.get_distance()
-        tuning_factor = controller.tune
         low = controller.pitch_low
         high = controller.pitch_high
         if pitch_distance > low:
@@ -65,7 +64,7 @@ class Sensor:
             return 2
         else:
             semitones = int((low - pitch_distance) / (low - high) * 12)
-            return get_factor(semitones)
+            return self.get_factor(semitones)
 
 
     def get_volume(self, controller):

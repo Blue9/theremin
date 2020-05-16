@@ -12,6 +12,7 @@ class Controller:
     def __init__(self, host='127.0.0.1'):
         self.s = Server(duplex=0).boot()
         self.s.start()
+        self.sensor = sensor.Sensor()
         self.base_note = 261.6
         self.pitch_low = 300
         self.pitch_high = 60
@@ -27,10 +28,9 @@ class Controller:
                            port=9000,
                            address='/data',
                            host=self.host)
-        sensor.get_sensors()
         while self.running:
-            pitch = sensor.get_pitch(self) * (2 ** self.octave_shift)
-            volume = sensor.get_volume(self)
+            pitch = self.sensor.get_pitch(self) * (2 ** self.octave_shift)
+            volume = self.sensor.get_volume(self)
             send.send([pitch, volume, self.sound_file])
             time.sleep(0.01)
 
@@ -42,3 +42,4 @@ class Controller:
     def main(self):
         thread = Thread(target=self.update)
         thread.start()
+        return thread

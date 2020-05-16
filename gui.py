@@ -173,5 +173,5 @@ if __name__ == '__main__':
         print('Usage: python3 gui.py host')
     host = sys.argv[1]
     controller = Controller(host=host)
-    controller.main()
+    thread = controller.main()
     ThereminGUI(controller).run()
