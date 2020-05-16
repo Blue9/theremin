@@ -59,8 +59,8 @@ Builder.load_string("""
             Slider:
                 id: lps
                 min: 0
-                value: 300
-                max: 400
+                value: 600
+                max: 1000
                 step: 10
                 on_value: root.controller.pitch_low = self.value
         BoxLayout:
@@ -70,7 +70,7 @@ Builder.load_string("""
                 id: hps
                 min: 0
                 value: 60
-                max: 400
+                max: 1000
                 step: 10
                 on_value: root.controller.pitch_high = self.value
         BoxLayout:
@@ -79,8 +79,8 @@ Builder.load_string("""
             Slider:
                 id: maxs
                 min: 0
-                value: 300
-                max: 400
+                value: 600
+                max: 1000
                 step: 10
                 on_value: root.controller.vol_high = self.value
         BoxLayout:
@@ -90,7 +90,7 @@ Builder.load_string("""
                 id: mins
                 min: 0
                 value: 60
-                max: 400
+                max: 1000
                 step: 10
                 on_value: root.controller.vol_low = self.value
         BoxLayout:

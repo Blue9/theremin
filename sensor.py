@@ -12,7 +12,7 @@ class Sensor:
     def __init__(self, reset=False):
         self.pitch_sensor = None
         self.vol_sensor = None
-        self.init_sensors()
+        self.init_sensors(reset=reset)
 
     def init_sensors(self, reset=False):
         if reset:
@@ -47,7 +47,7 @@ class Sensor:
     @staticmethod
     def _setup_sensor(sensor):
         sensor.sensor_init()
-        sensor.set_distance_mode(1)
+        sensor.set_distance_mode(2)
         sensor.start_ranging()
 
     @staticmethod
@@ -83,3 +83,14 @@ class Sensor:
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(Sensor.pitch_reset_pin, GPIO.OUT)
 GPIO.setup(Sensor.vol_reset_pin, GPIO.OUT)
+
+if __name__ == '__main__':
+    import sys
+    if sys.argv[1] == 'reset':
+        sensor = Sensor(reset=True)
+    else:
+        sensor = Sensor()
+    while True:
+        d = sensor.pitch_sensor.get_distance()
+        print(d)
+
