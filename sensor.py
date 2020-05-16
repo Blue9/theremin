@@ -64,7 +64,7 @@ class Sensor:
             return 2
         else:
             semitones = int((low - pitch_distance) / (low - high) * 12)
-            return self.get_factor(semitones)
+            return semitones, self.get_factor(semitones)
 
 
     def get_volume(self, controller):

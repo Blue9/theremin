@@ -123,8 +123,8 @@ Builder.load_string("""
                 text: 'Synth 2'
                 on_press: root.controller.set_sound('synth2')
             Butt:
-                text: 'Bass'
-                on_press: root.controller.set_sound('bass')
+                text: 'Kick'
+                on_press: root.controller.set_sound('kick')
             Butt:
                 text: 'Lead'
                 on_press: root.controller.set_sound('lead')
