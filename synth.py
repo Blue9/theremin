@@ -7,7 +7,7 @@ TIMESTAMP = time.time()
 LOOPING = False
 
 def looptable_update():
-    pass
+    
 
 # For loop pedal sounds
 loops = [
@@ -43,10 +43,11 @@ def callback(address, pitch, semitones, volume, sound_id, loop):
             loops.append(SndTable(sound_id,start=2,stop=2+duration))
             LOOPING = True
         else:
-            loops[-1].append(sound_id,start=2,stop=2+duration)
+            
+            loops[-1].append(SndTable(sound_id,start=2,stop=2+duration))
     else:
         if LOOPING:
-            loop_osc.append(Osc(table=loops[-1], freq=loops[-1].getRate())
+            loop_osc.append(Osc(table=loops[-1], freq=loops[-1].getRate()*pitch, mul=volume)
     
     TIMESTAMP = time.time()
         
