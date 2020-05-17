@@ -42,6 +42,11 @@ Builder.load_string("""
                 root.manager.transition = NoTransition()
                 root.manager.current = 'tune'
         Butt:
+            text: 'Loop'
+            on_press:
+                root.manager.transition = NoTransition()
+                root.manager.current = 'loop'
+        Butt:
             text: 'Select Sound'
             on_press:
                 root.manager.transition = NoTransition()
@@ -49,6 +54,23 @@ Builder.load_string("""
         ReturnButt:
             text: 'Quit'
             on_press: root.controller.running = False; app.stop()
+
+<LoopScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Butt:
+            text: 'Start'
+            on_press:
+                root.controller.rec = 'start'
+        Butt:
+            text: 'Reset'
+            on_press:
+                root.controller.rec = 'reset'
+        ReturnButt:
+            text: 'Back'
+            on_press:
+                root.manager.transition = NoTransition()
+                root.manager.current = 'menu'
 
 <TuneScreen>:
     BoxLayout:
@@ -149,6 +171,12 @@ class TuneScreen(Screen):
         self.controller = sensor_controller
 
 
+class LoopScreen(Screen):
+    def __init__(self, sensor_controller, **kwargs):
+        super().__init__(**kwargs)
+        self.controller = sensor_controller
+
+
 class SelectSoundScreen(Screen):
     def __init__(self, sensor_controller, **kwargs):
         super().__init__(**kwargs)
@@ -164,6 +192,7 @@ class ThereminGUI(App):
         sm = ScreenManager()
         sm.add_widget(MenuScreen(self.sensor_controller, name='menu'))
         sm.add_widget(TuneScreen(self.sensor_controller, name='tune'))
+        sm.add_widget(LoopScreen(self.sensor_controller, name='loop'))
         sm.add_widget(SelectSoundScreen(self.sensor_controller, name='select_sound'))
         return sm
 
