@@ -123,8 +123,18 @@ Builder.load_string("""
                 min: -2
                 value: 0
                 max: 2
-                step: 1 
+                step: 1
                 on_value: root.controller.octave_shift = self.value
+        BoxLayout:
+            LLabel:
+                text: 'BPM: ' + str(round(bpm.value))
+            Slider:
+                id: bpm
+                min: 60
+                value: 140
+                max: 200
+                step: 10
+                on_value: root.controller.bpm = self.value
         ReturnButt:
             text: 'Back'
             on_press:

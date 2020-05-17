@@ -22,11 +22,12 @@ class Controller:
         self.sound_file = 'synth1'
         self.octave_shift = 0
         self.host = host
+        self.bpm= 140
         self.rec = ''
 
     def update(self):
-        # pitch, semitones, volume, sound_file, record_command
-        send = OscDataSend(types='fifss',
+        # pitch, semitones, volume, bpm, sound_file, record_command
+        send = OscDataSend(types='fifiss',
                            port=9000,
                            address='/data',
                            host=self.host)
@@ -36,7 +37,7 @@ class Controller:
             pitch *= (2 ** os)
             semitones += os * 12
             volume = self.sensor.get_volume(self)
-            send.send([pitch, semitones, volume, self.sound_file, self.rec])
+            send.send([pitch, semitones, volume, self.bpm, self.sound_file, self.rec])
             self.rec = ''
             time.sleep(0.01)
 

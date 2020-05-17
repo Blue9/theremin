@@ -7,7 +7,8 @@ import time
 s = Server(duplex=0).boot()
 s.recordOptions(fileformat=0, sampletype=1)
 
-def callback(address, pitch, semitones, volume, sound_id, record_command):
+
+def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command):
     """
     OSC callback.
 
@@ -18,6 +19,12 @@ def callback(address, pitch, semitones, volume, sound_id, record_command):
     sound_id is a string in synth_tables or beat_tables
     record_command is one of empty string, start or reset
     """
+    global beat, bpm
+    if _bpm != bpm:
+        beat.stop()
+        beat = get_beat(_bpm)
+        beat.play()
+        bpm = _bpm
     if sound_id in synth_tables:
         looper.setPitch(pitch)
         looper.setMul(volume)
@@ -43,7 +50,6 @@ def callback(address, pitch, semitones, volume, sound_id, record_command):
 
 
 rec = OscDataReceive(port=9000, address='/data', function=callback)
-
 
 
 # For continuous sounds (synths, leads)
@@ -105,11 +111,14 @@ class Melody(EventInstrument):
                            mul=1).out()
 
 
-bpm = 140
+def get_beat(bpm):
+    return Events(instr=Melody,
+                  midinote=EventSeq([note]),
+                  beat=EventSeq([1], occurrences=inf), db=0, bpm=bpm)
 
-beat = Events(instr=Melody,
-              midinote=EventSeq([note]),
-              beat=EventSeq([1], occurrences=inf), db=0, bpm=bpm)
+
+bpm = 140
+beat = get_beat(bpm=bpm)
 
 # def note_changes():
 #     while True:
@@ -146,7 +155,8 @@ def handle_loop(duration):
     s.recstop()
     # os.rename('rec_temp.wav', 'rec.wav')
     # loop_table.setTable(SndTable('rec.wav'))  # reload file
-    loop_table.setTable(SndTable(os.path.join(os.path.expanduser('~'), 'pyo_rec.wav')))  # reload file
+    loop_table.setTable(SndTable(os.path.join(
+        os.path.expanduser('~'), 'pyo_rec.wav')))  # reload file
     loop_table.setDur(duration)
     loop_play.stop()
     loop_play.out()
