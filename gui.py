@@ -46,6 +46,10 @@ Builder.load_string("""
             on_press:
                 root.manager.transition = NoTransition()
                 root.manager.current = 'select_sound'
+        Butt: 
+            text: 'Loop Pedal'
+            on_press:
+                root.controller.toggle_loop();
         ReturnButt:
             text: 'Quit'
             on_press: root.controller.running = False; app.stop()

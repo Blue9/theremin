@@ -16,7 +16,7 @@ loops = [
 
 loop_osc = []
 
-def callback(address, pitch, semitones, volume, sound_id):
+def callback(address, pitch, semitones, volume, sound_id, loop):
     
     duration = time.time()-TIMESTAMP
 
@@ -38,8 +38,7 @@ def callback(address, pitch, semitones, volume, sound_id):
         print('Could not load sound', sound_id)
     currently_playing[0] = sound_id
 
-    loop = False # <- put this in the function header
-    if loop:
+    if loop and (sound_id in beats_tables or sound_id in synth_tables):
         if not LOOPING:
             loops.append(SndTable(sound_id,start=2,stop=2+duration))
             LOOPING = True
