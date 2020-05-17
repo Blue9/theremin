@@ -2,6 +2,7 @@ import os
 import time
 import threading
 from pyo import *
+import time
 
 s = Server(duplex=0).boot()
 s.recordOptions(fileformat=0, sampletype=1)
@@ -42,6 +43,9 @@ def callback(address, pitch, semitones, volume, sound_id, record_command):
 
 
 rec = OscDataReceive(port=9000, address='/data', function=callback)
+
+
+
 # For continuous sounds (synths, leads)
 synth_tables = {
     'synth1': SndTable('sounds/synth1.wav'),
