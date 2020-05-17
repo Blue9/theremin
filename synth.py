@@ -1,9 +1,25 @@
 from pyo import *
+import time
 
 s = Server(duplex=0).boot()
 
+TIMESTAMP = time.time()
+LOOPING = False
+
+def looptable_update():
+    pass
+
+# For loop pedal sounds
+loops = [
+    # SndTable(), SndTable(), ... 
+]
+
+loop_osc = []
 
 def callback(address, pitch, semitones, volume, sound_id):
+    
+    duration = time.time()-TIMESTAMP
+
     if sound_id in synth_tables:
         looper.setPitch(pitch)
         looper.setMul(volume)
@@ -22,8 +38,25 @@ def callback(address, pitch, semitones, volume, sound_id):
         print('Could not load sound', sound_id)
     currently_playing[0] = sound_id
 
+    loop = False # <- put this in the function header
+    if loop:
+        if not LOOPING:
+            loops.append(SndTable(sound_id,start=2,stop=2+duration))
+            LOOPING = True
+        else:
+            loops[-1].append(sound_id,start=2,stop=2+duration)
+    else:
+        if LOOPING:
+            loop_osc.append(Osc(table=loops[-1], freq=loops[-1].getRate())
+    
+    TIMESTAMP = time.time()
+        
+
 
 rec = OscDataReceive(port=9000, address='/data', function=callback)
+
+
+
 # For continuous sounds (synths, leads)
 synth_tables = {
     'synth1': SndTable('sounds/synth1.wav'),
