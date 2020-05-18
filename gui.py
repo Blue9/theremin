@@ -33,24 +33,31 @@ Builder.load_string("""
         orientation: 'vertical'
         font_size: '40sp'
         LLabel:
-            size_hint: [1, 2]
             text: 'Theremin 2.0'
             font_size: '60px'
-        Butt:
-            text: 'Tune'
-            on_press:
-                root.manager.transition = NoTransition()
-                root.manager.current = 'tune'
-        Butt:
-            text: 'Loop'
-            on_press:
-                root.manager.transition = NoTransition()
-                root.manager.current = 'loop'
-        Butt:
-            text: 'Select Sound'
-            on_press:
-                root.manager.transition = NoTransition()
-                root.manager.current = 'select_sound'
+        GridLayout:
+            size_hint: [1, 2]
+            cols: 2
+            Butt:
+                text: 'Tune'
+                on_press:
+                    root.manager.transition = NoTransition()
+                    root.manager.current = 'tune'
+            Butt:
+                text: 'Loop'
+                on_press:
+                    root.manager.transition = NoTransition()
+                    root.manager.current = 'loop'
+            Butt:
+                text: 'Select Sound'
+                on_press:
+                    root.manager.transition = NoTransition()
+                    root.manager.current = 'select_sound'
+            Butt:
+                text: 'Options'
+                on_press:
+                    root.manager.transition = NoTransition()
+                    root.manager.current = 'options'
         ReturnButt:
             text: 'Quit'
             on_press: root.controller.running = False; app.stop()
@@ -58,10 +65,6 @@ Builder.load_string("""
 <LoopScreen>:
     BoxLayout:
         orientation: 'vertical'
-        Butt:
-            text: 'Toggle instrument loop'
-            on_press:
-                root.controller.repeat = not root.controller.repeat    
         Butt:
             text: 'Start recording'
             on_press:
@@ -75,6 +78,46 @@ Builder.load_string("""
             on_press:
                 root.manager.transition = NoTransition()
                 root.manager.current = 'menu'
+
+
+<OptionsScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            LLabel:
+                text: 'Octave shift: ' + str(round(octave.value))
+            Slider:
+                id: octave
+                min: -2
+                value: 0
+                max: 2
+                step: 1
+                on_value: root.controller.octave_shift = self.value
+        BoxLayout:
+            LLabel:
+                text: 'BPM: ' + str(round(bpm.value))
+            Slider:
+                id: bpm
+                min: 60
+                value: 140
+                max: 200
+                step: 10
+                on_value: root.controller.bpm = self.value
+        Butt:
+            text: 'Toggle instrument loop'
+            on_press:
+                root.controller.repeat = not root.controller.repeat    
+        Butt:
+            text: 'Toggle fun mode'
+            on_press:
+                root.controller.fun_mode = not root.controller.fun_mode
+        ReturnButt:
+            text: 'Back'
+            on_press:
+                root.manager.transition = NoTransition()
+                root.manager.current = 'menu'
+
+
 
 <TuneScreen>:
     BoxLayout:
@@ -119,26 +162,6 @@ Builder.load_string("""
                 max: 1000
                 step: 10
                 on_value: root.controller.vol_low = self.value
-        BoxLayout:
-            LLabel:
-                text: 'Octave shift: ' + str(round(octave.value))
-            Slider:
-                id: octave
-                min: -2
-                value: 0
-                max: 2
-                step: 1
-                on_value: root.controller.octave_shift = self.value
-        BoxLayout:
-            LLabel:
-                text: 'BPM: ' + str(round(bpm.value))
-            Slider:
-                id: bpm
-                min: 60
-                value: 140
-                max: 200
-                step: 10
-                on_value: root.controller.bpm = self.value
         ReturnButt:
             text: 'Back'
             on_press:
@@ -217,6 +240,12 @@ class LoopScreen(Screen):
         self.controller = sensor_controller
 
 
+class OptionsScreen(Screen):
+    def __init__(self, sensor_controller, **kwargs):
+        super().__init__(**kwargs)
+        self.controller = sensor_controller
+
+
 class SelectSoundScreen(Screen):
     def __init__(self, sensor_controller, **kwargs):
         super().__init__(**kwargs)
@@ -234,6 +263,7 @@ class ThereminGUI(App):
         sm.add_widget(TuneScreen(self.sensor_controller, name='tune'))
         sm.add_widget(LoopScreen(self.sensor_controller, name='loop'))
         sm.add_widget(SelectSoundScreen(self.sensor_controller, name='select_sound'))
+        sm.add_widget(OptionsScreen(self.sensor_controller, name='options'))
         return sm
 
 

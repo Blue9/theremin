@@ -60,7 +60,7 @@ class Sensor:
         low = controller.pitch_low
         high = controller.pitch_high
         if pitch_distance > low:
-            return 0, 1, True
+            return 0, 1, (pitch_distance > low + 50)  # Add a small buffer
         elif pitch_distance < high:
             return 12, 2, False
         else:

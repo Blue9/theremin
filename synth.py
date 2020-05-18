@@ -9,7 +9,7 @@ s.recordOptions(fileformat=0, sampletype=1)
 prev_occ = inf
 
 
-def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command, server_command, repeat):
+def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command, server_command, repeat, wobble):
     """
     OSC callback.
 
@@ -21,6 +21,7 @@ def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command, 
     record_command is one of empty string, start or reset
     server_command is empty_string or stop
     """
+    print(wobble)
     global beat, bpm, prev_occ
     occurrences = 1 if repeat == 0 else inf
     if server_command == 'stop':
@@ -42,9 +43,10 @@ def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command, 
             beat.play()
         bpm = _bpm
     if sound_id in synth_tables:
-        looper.setPitch(pitch)
+        _looper.setPitch(pitch)
         looper.setMul(volume)
-        looper.setTable(synth_tables[sound_id])
+        _looper.setTable(synth_tables[sound_id])
+        drive.setValue(wobble)
         if currently_playing[0] not in synth_tables:
             beat.stop()
             looper.out()
@@ -83,7 +85,7 @@ beat_tables = {
     'snare': SndTable('sounds/snare.wav'),
 }
 
-looper = Looper(table=synth_tables['synth1'],
+_looper = Looper(table=synth_tables['synth1'],
                 pitch=1,
                 start=2,
                 dur=3,
@@ -95,9 +97,12 @@ looper = Looper(table=synth_tables['synth1'],
                 autosmooth=True,
                 mul=1
                 )
-stlooper = looper.mix(2).out()
+stlooper = _looper.mix(2)
 
-currently_playing = ['synth']
+drive = Sig(0)
+looper = Freeverb(stlooper, size=drive, bal=1).out()
+
+currently_playing = ['none']
 # ----
 
 # For repeating sounds (kicks, hi-hats, melodies)

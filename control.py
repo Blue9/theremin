@@ -14,10 +14,10 @@ class Controller:
         self.s.start()
         self.sensor = sensor.Sensor()
         self.base_note = 261.6
-        self.pitch_low = 300
+        self.pitch_low = 600
         self.pitch_high = 60
         self.vol_low = 60
-        self.vol_high = 300
+        self.vol_high = 600
         self.running = True
         self.sound_file = 'synth1'
         self.octave_shift = 0
@@ -27,10 +27,11 @@ class Controller:
         self._prev_far_limit = True
         self._prev_pitch = 1
         self.repeat = 0
+        self.fun_mode = False
 
     def update(self):
-        # pitch, semitones, volume, bpm, sound_file, record_command, server_command, repeat
-        send = OscDataSend(types='fifisssi',
+        # pitch, semitones, volume, bpm, sound_file, record_command, server_command, repeat, wobble
+        send = OscDataSend(types='fifisssif',
                            port=9000,
                            address='/data',
                            host=self.host)
@@ -44,12 +45,20 @@ class Controller:
             self._prev_far_limit = far_limit
             os = self.octave_shift
             semitones += os * 12
-            volume = self.sensor.get_volume(self) if not far_limit else 0
+            volume = self.sensor.get_volume(self)
             pitch *= (2 ** os)
-            send.send([pitch, semitones, volume, self.bpm, self.sound_file, self.rec, play, self.repeat])
+            if self.fun_mode:
+                wobble = 1 - volume
+                print(wobble, volume)
+                volume = 1
+            else:
+                wobble = 0
+            if far_limit:
+                volume = 0
+            send.send([pitch, semitones, volume, self.bpm, self.sound_file, self.rec, play, self.repeat, wobble])
             self.rec = ''
             time.sleep(0.01)
-        send.send([0, 0, 0, 0, '', '', 'stop', 0])
+        send.send([0, 0, 0, 0, '', '', 'stop', 0, 0])
 
     def set_sound(self, sound):
         self.sound_file = sound
