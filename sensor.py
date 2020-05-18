@@ -4,8 +4,8 @@ import RPi.GPIO as GPIO
 
 
 class Sensor:
-    pitch_reset_pin = 17
-    vol_reset_pin = 22
+    pitch_reset_pin = 22
+    vol_reset_pin = 19
     pitch_address = 0x20
     vol_address = 0x30
 
@@ -59,9 +59,9 @@ class Sensor:
         low = controller.pitch_low
         high = controller.pitch_high
         if pitch_distance > low:
-            return 1
+            return 0, 1
         elif pitch_distance < high:
-            return 2
+            return 12, 2
         else:
             semitones = int((low - pitch_distance) / (low - high) * 12)
             return semitones, self.get_factor(semitones)

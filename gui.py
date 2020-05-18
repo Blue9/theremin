@@ -148,8 +148,11 @@ Builder.load_string("""
         TabbedPanel:
             size_hint: [1, 5]
             do_default_tab: False
+            tab_width: self.parent.width / 3
+            tab_height: '150px'
             TabbedPanelItem:
                 text: 'Synths'
+                font_size: '40px'
                 GridLayout:
                     cols: 2
                     Butt:
@@ -160,6 +163,7 @@ Builder.load_string("""
                         on_press: root.controller.set_sound('synth2')
             TabbedPanelItem:
                 text: 'Drums'
+                font_size: '40px'
                 GridLayout:
                     cols: 2
                     Butt:
@@ -176,6 +180,7 @@ Builder.load_string("""
                         on_press: root.controller.set_sound('snare')
             TabbedPanelItem:
                 text: 'Melody'
+                font_size: '40px'
                 GridLayout:
                     cols: 2
                     Butt:
