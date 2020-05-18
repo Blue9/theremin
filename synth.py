@@ -83,12 +83,14 @@ synth_tables = {
 }
 
 beat_tables = {
-    'kick': SndTable('sounds/kick.wav'),
+    'kick': SndTable('sounds/bl_kick.wav'),
     'bell': SndTable('sounds/celesta.wav'),
     'bell2': SndTable('sounds/synth3.wav'),
+    'bass': SndTable('sounds/bl_bass.wav'),
+    'lead': SndTable('sounds/bl_lead.wav'),
     'clap': SndTable('sounds/clap.wav'),
     'hihat': SndTable('sounds/hihat.wav'),
-    'snare': SndTable('sounds/snare.wav'),
+    'snare': SndTable('sounds/bl_snare.wav'),
     'guitar': SndTable('sounds/guitar.wav'),
 }
 

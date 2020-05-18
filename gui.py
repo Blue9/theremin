@@ -225,6 +225,12 @@ Builder.load_string("""
                     Butt:
                         text: 'Guitar'
                         on_press: root.controller.set_sound('guitar')
+                    Butt:
+                        text: 'Bass'
+                        on_press: root.controller.set_sound('bass')
+                    Butt:
+                        text: 'Lead'
+                        on_press: root.controller.set_sound('lead')
         ReturnButt:
             text: 'Back'
             on_press:
