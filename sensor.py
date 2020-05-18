@@ -62,7 +62,7 @@ class Sensor:
         if pitch_distance > low:
             return 0, 1, True
         elif pitch_distance < high:
-            return 12, 2, True
+            return 12, 2, False
         else:
             semitones = int((low - pitch_distance) / (low - high) * 12)
             return semitones, self.get_factor(semitones), False
