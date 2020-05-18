@@ -61,7 +61,10 @@ synth_tables = {
 
 beat_tables = {
     'kick': SndTable('sounds/kick.wav'),
-    'lead': SndTable('sounds/celesta.wav'),
+    'bell': SndTable('sounds/celesta.wav'),
+    'clap': SndTable('sounds/clap.wav'),
+    'hihat': SndTable('sounds/hihat.wav'),
+    'snare': SndTable('sounds/snare.wav'),
 }
 
 looper = Looper(table=synth_tables['synth1'],

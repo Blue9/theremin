@@ -165,13 +165,22 @@ Builder.load_string("""
                     Butt:
                         text: 'Kick'
                         on_press: root.controller.set_sound('kick')
+                    Butt:
+                        text: 'Clap'
+                        on_press: root.controller.set_sound('clap')
+                    Butt:
+                        text: 'Hat'
+                        on_press: root.controller.set_sound('hihat')
+                    Butt:
+                        text: 'Snare'
+                        on_press: root.controller.set_sound('snare')
             TabbedPanelItem:
                 text: 'Melody'
                 GridLayout:
                     cols: 2
                     Butt:
                         text: 'Bell'
-                        on_press: root.controller.set_sound('lead')
+                        on_press: root.controller.set_sound('bell')
         ReturnButt:
             text: 'Back'
             on_press:
