@@ -188,6 +188,12 @@ Builder.load_string("""
                     Butt:
                         text: 'Smooth'
                         on_press: root.controller.set_sound('synth2')
+                    Butt:
+                        text: 'Soft'
+                        on_press: root.controller.set_sound('synth3')
+                    Butt:
+                        text: 'Orchestra'
+                        on_press: root.controller.set_sound('synth4')
             TabbedPanelItem:
                 text: 'Drums'
                 font_size: '40px'
@@ -213,6 +219,12 @@ Builder.load_string("""
                     Butt:
                         text: 'Bell'
                         on_press: root.controller.set_sound('bell')
+                    Butt:
+                        text: 'Bell 2'
+                        on_press: root.controller.set_sound('bell2')
+                    Butt:
+                        text: 'Guitar'
+                        on_press: root.controller.set_sound('guitar')
         ReturnButt:
             text: 'Back'
             on_press:

@@ -21,7 +21,6 @@ def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command, 
     record_command is one of empty string, start or reset
     server_command is empty_string or stop
     """
-    print(wobble)
     global beat, bpm, prev_occ
     occurrences = 1 if repeat == 0 else inf
     if server_command == 'stop':
@@ -50,6 +49,10 @@ def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command, 
         if currently_playing[0] not in synth_tables:
             beat.stop()
             looper.out()
+        if sound_id == 'synth4':
+            _looper.setDur(1)
+        else:
+            _looper.setDur(3)
     elif sound_id in beat_tables:
         beat_vol.setValue(volume)
         beat_id[0] = sound_id
@@ -75,14 +78,18 @@ rec = OscDataReceive(port=9000, address='/data', function=callback)
 synth_tables = {
     'synth1': SndTable('sounds/synth1.wav'),
     'synth2': SndTable('sounds/synth2.wav'),
+    'synth3': SndTable('sounds/synth3.wav'),
+    'synth4': SndTable('sounds/synth4.wav'),
 }
 
 beat_tables = {
     'kick': SndTable('sounds/kick.wav'),
     'bell': SndTable('sounds/celesta.wav'),
+    'bell2': SndTable('sounds/synth3.wav'),
     'clap': SndTable('sounds/clap.wav'),
     'hihat': SndTable('sounds/hihat.wav'),
     'snare': SndTable('sounds/snare.wav'),
+    'guitar': SndTable('sounds/guitar.wav'),
 }
 
 _looper = Looper(table=synth_tables['synth1'],
