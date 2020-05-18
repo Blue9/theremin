@@ -55,16 +55,17 @@ class Sensor:
         return 2 ** (semitones / 12)
 
     def get_pitch(self, controller):
+        """Return semitone, pitch, beyond_far_limit."""
         pitch_distance = self.pitch_sensor.get_distance()
         low = controller.pitch_low
         high = controller.pitch_high
         if pitch_distance > low:
-            return 0, 1
+            return 0, 1, True
         elif pitch_distance < high:
-            return 12, 2
+            return 12, 2, True
         else:
             semitones = int((low - pitch_distance) / (low - high) * 12)
-            return semitones, self.get_factor(semitones)
+            return semitones, self.get_factor(semitones), False
 
 
     def get_volume(self, controller):

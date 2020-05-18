@@ -59,11 +59,15 @@ Builder.load_string("""
     BoxLayout:
         orientation: 'vertical'
         Butt:
-            text: 'Start'
+            text: 'Toggle instrument loop'
+            on_press:
+                root.controller.repeat = not root.controller.repeat    
+        Butt:
+            text: 'Start recording'
             on_press:
                 root.controller.rec = 'start'
         Butt:
-            text: 'Reset'
+            text: 'Reset loops'
             on_press:
                 root.controller.rec = 'reset'
         ReturnButt:

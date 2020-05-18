@@ -6,9 +6,9 @@ import time
 
 s = Server(duplex=0).boot()
 s.recordOptions(fileformat=0, sampletype=1)
+prev_occ = inf
 
-
-def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command):
+def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command, server_command, repeat):
     """
     OSC callback.
 
@@ -18,11 +18,25 @@ def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command):
     volume is 0 to 1
     sound_id is a string in synth_tables or beat_tables
     record_command is one of empty string, start or reset
+    server_command is empty_string or stop
     """
-    global beat, bpm
-    if _bpm != bpm:
+    global beat, bpm, prev_occ
+    occurrences = 1 if repeat == 0 else inf
+    if server_command == 'stop':
+        looper.stop()
         beat.stop()
-        beat = get_beat(_bpm)
+        loop_play.stop()
+    if prev_occ != occurrences:
+        beat.stop()
+        beat = get_beat(bpm, occurrences)
+        if occurrences == inf and currently_playing[0] in beat_tables:
+            beat.play()
+        prev_occ = occurrences
+    if server_command == 'play' and currently_playing[0] in beat_tables:
+        beat.play()
+    if _bpm != bpm and occurrences == inf:
+        beat.stop()
+        beat = get_beat(_bpm, occurrences)
         if currently_playing[0] in beat_tables:
             beat.play()
         bpm = _bpm
@@ -36,9 +50,9 @@ def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command):
     elif sound_id in beat_tables:
         beat_id[0] = sound_id
         beat_pitch[0] = pitch
-        note.setValue(60 + semitones)
+        # note.setValue(60 + semitones)
         if currently_playing[0] not in beat_tables:
-            looper.setMul(0)
+            looper.stop()
             beat.play()
     else:
         print('Could not load sound', sound_id)
@@ -115,10 +129,10 @@ class Melody(EventInstrument):
                            mul=1).out()
 
 
-def get_beat(bpm):
+def get_beat(bpm, occurrences=inf):
     return Events(instr=Melody,
                   midinote=EventSeq([note]),
-                  beat=EventSeq([1], occurrences=inf), db=0, bpm=bpm)
+                  beat=EventSeq([1], occurrences=occurrences), db=0, bpm=bpm)
 
 
 bpm = 140
@@ -171,7 +185,7 @@ loop_table = Looper(table=NewTable(1),
                     start=0,
                     mode=1,
                     dur=1,
-                    xfade=1,
+                    xfade=0,
                     mul=1)
 
 loop_play = loop_table.mix(2)

@@ -24,25 +24,34 @@ class Controller:
         self.host = host
         self.bpm= 140
         self.rec = ''
+        self._prev_far_limit = True
+        self._prev_pitch = 1
+        self.repeat = 0
 
     def update(self):
-        # pitch, semitones, volume, bpm, sound_file, record_command
-        send = OscDataSend(types='fifiss',
+        # pitch, semitones, volume, bpm, sound_file, record_command, server_command, repeat
+        send = OscDataSend(types='fifisssi',
                            port=9000,
                            address='/data',
                            host=self.host)
         while self.running:
-            semitones, pitch = self.sensor.get_pitch(self)
+            semitones, pitch, far_limit = self.sensor.get_pitch(self)
+            if pitch != self._prev_pitch or (self._prev_far_limit and not far_limit):
+                play = 'play'
+            else:
+                play = ''
+            self._prev_pitch = pitch
+            self._prev_far_limit = far_limit
             os = self.octave_shift
-            pitch *= (2 ** os)
             semitones += os * 12
-            volume = self.sensor.get_volume(self)
-            send.send([pitch, semitones, volume, self.bpm, self.sound_file, self.rec])
+            volume = self.sensor.get_volume(self) if not far_limit else 0
+            pitch *= (2 ** os)
+            send.send([pitch, semitones, volume, self.bpm, self.sound_file, self.rec, play, self.repeat])
             self.rec = ''
             time.sleep(0.01)
+        send.send([0, 0, 0, 0, '', '', 'stop', 0])
 
     def set_sound(self, sound):
-        # sound is element of ['synth1', 'synth2', 'bass', 'lead']
         self.sound_file = sound
         pass
 
