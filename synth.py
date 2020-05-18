@@ -23,7 +23,8 @@ def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command):
     if _bpm != bpm:
         beat.stop()
         beat = get_beat(_bpm)
-        beat.play()
+        if currently_playing[0] in beat_tables:
+            beat.play()
         bpm = _bpm
     if sound_id in synth_tables:
         looper.setPitch(pitch)

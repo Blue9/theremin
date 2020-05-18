@@ -145,21 +145,33 @@ Builder.load_string("""
 <SelectSoundScreen>:
     BoxLayout:
         orientation: 'vertical'
-        GridLayout:
-            size_hint: [1, 4]
-            cols: 2
-            Butt:
-                text: 'Synth 1'
-                on_press: root.controller.set_sound('synth1')
-            Butt:
-                text: 'Synth 2'
-                on_press: root.controller.set_sound('synth2')
-            Butt:
-                text: 'Kick'
-                on_press: root.controller.set_sound('kick')
-            Butt:
-                text: 'Lead'
-                on_press: root.controller.set_sound('lead')
+        TabbedPanel:
+            size_hint: [1, 5]
+            do_default_tab: False
+            TabbedPanelItem:
+                text: 'Synths'
+                GridLayout:
+                    cols: 2
+                    Butt:
+                        text: 'Crunchy'
+                        on_press: root.controller.set_sound('synth1')
+                    Butt:
+                        text: 'Smooth'
+                        on_press: root.controller.set_sound('synth2')
+            TabbedPanelItem:
+                text: 'Drums'
+                GridLayout:
+                    cols: 2
+                    Butt:
+                        text: 'Kick'
+                        on_press: root.controller.set_sound('kick')
+            TabbedPanelItem:
+                text: 'Melody'
+                GridLayout:
+                    cols: 2
+                    Butt:
+                        text: 'Bell'
+                        on_press: root.controller.set_sound('lead')
         ReturnButt:
             text: 'Back'
             on_press:
