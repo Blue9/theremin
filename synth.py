@@ -8,6 +8,7 @@ s = Server(duplex=0).boot()
 s.recordOptions(fileformat=0, sampletype=1)
 prev_occ = inf
 
+
 def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command, server_command, repeat):
     """
     OSC callback.
@@ -32,7 +33,7 @@ def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command, 
         if occurrences == inf and currently_playing[0] in beat_tables:
             beat.play()
         prev_occ = occurrences
-    if server_command == 'play' and currently_playing[0] in beat_tables:
+    if occurrences == 1 and server_command == 'play' and currently_playing[0] in beat_tables:
         beat.play()
     if _bpm != bpm and occurrences == inf:
         beat.stop()
@@ -48,6 +49,7 @@ def callback(address, pitch, semitones, volume, _bpm, sound_id, record_command, 
             beat.stop()
             looper.out()
     elif sound_id in beat_tables:
+        beat_vol.setValue(volume)
         beat_id[0] = sound_id
         beat_pitch[0] = pitch
         # note.setValue(60 + semitones)
@@ -100,8 +102,8 @@ currently_playing = ['synth']
 
 # For repeating sounds (kicks, hi-hats, melodies)
 
-note = Sig(60)
 
+beat_vol = Sig(1)
 beat_id = ['kick']
 
 
@@ -126,12 +128,12 @@ class Melody(EventInstrument):
                            mode=0,
                            dur=self.dur,
                            xfade=0,
-                           mul=1).out()
+                           mul=beat_vol).out()
 
 
 def get_beat(bpm, occurrences=inf):
     return Events(instr=Melody,
-                  midinote=EventSeq([note]),
+                  midinote=EventSeq([60]),
                   beat=EventSeq([1], occurrences=occurrences), db=0, bpm=bpm)
 
 
