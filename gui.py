@@ -11,6 +11,7 @@ Config.set('graphics', 'height', 240)
 
 Builder.load_string("""
 #: import NoTransition kivy.uix.screenmanager.NoTransition
+#: import SlideTransition kivy.uix.screenmanager.SlideTransition
 
 <LLabel@Label>:
     font_size: '40px'
@@ -41,22 +42,22 @@ Builder.load_string("""
             Butt:
                 text: 'Tune'
                 on_press:
-                    root.manager.transition = NoTransition()
+                    root.manager.transition.direction = 'left'
                     root.manager.current = 'tune'
             Butt:
                 text: 'Loop'
                 on_press:
-                    root.manager.transition = NoTransition()
+                    root.manager.transition.direction = 'left'
                     root.manager.current = 'loop'
             Butt:
                 text: 'Select Sound'
                 on_press:
-                    root.manager.transition = NoTransition()
+                    root.manager.transition.direction = 'left'
                     root.manager.current = 'select_sound'
             Butt:
                 text: 'Options'
                 on_press:
-                    root.manager.transition = NoTransition()
+                    root.manager.transition.direction = 'left'
                     root.manager.current = 'options'
         ReturnButt:
             text: 'Quit'
@@ -76,7 +77,7 @@ Builder.load_string("""
         ReturnButt:
             text: 'Back'
             on_press:
-                root.manager.transition = NoTransition()
+                root.manager.transition.direction = 'right'
                 root.manager.current = 'menu'
 
 
@@ -114,7 +115,7 @@ Builder.load_string("""
         ReturnButt:
             text: 'Back'
             on_press:
-                root.manager.transition = NoTransition()
+                root.manager.transition.direction = 'right'
                 root.manager.current = 'menu'
 
 
@@ -124,7 +125,7 @@ Builder.load_string("""
         orientation: 'vertical'
         BoxLayout:
             LLabel:
-                text: 'Low pitch: ' + str(int(lps.value))
+                text: 'Pitch near: ' + str(int(lps.value))
             Slider:
                 id: lps
                 min: 0
@@ -134,7 +135,7 @@ Builder.load_string("""
                 on_value: root.controller.pitch_low = self.value
         BoxLayout:
             LLabel:
-                text: 'High pitch: ' + str(int(hps.value))
+                text: 'Pitch far: ' + str(int(hps.value))
             Slider:
                 id: hps
                 min: 0
@@ -144,7 +145,7 @@ Builder.load_string("""
                 on_value: root.controller.pitch_high = self.value
         BoxLayout:
             LLabel:
-                text: 'Max volume: ' + str(int(maxs.value))
+                text: 'Volume far: ' + str(int(maxs.value))
             Slider:
                 id: maxs
                 min: 0
@@ -154,7 +155,7 @@ Builder.load_string("""
                 on_value: root.controller.vol_high = self.value
         BoxLayout:
             LLabel:
-                text: 'Min volume: ' + str(int(mins.value))
+                text: 'Volume near: ' + str(int(mins.value))
             Slider:
                 id: mins
                 min: 0
@@ -165,7 +166,7 @@ Builder.load_string("""
         ReturnButt:
             text: 'Back'
             on_press:
-                root.manager.transition = NoTransition()
+                root.manager.transition.direction = 'right'
                 root.manager.current = 'menu'
 
 
@@ -234,7 +235,7 @@ Builder.load_string("""
         ReturnButt:
             text: 'Back'
             on_press:
-                root.manager.transition = NoTransition()
+                root.manager.transition.direction = 'right'
                 root.manager.current = 'menu'
 
 """)
