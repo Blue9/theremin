@@ -1,20 +1,15 @@
-Issue:
-Rohan's laptop and pi won't talk smhsmhsmh 
+# Theremin 2.0
 
-Install pyo: pip install pyo
+A digital theremin running on a Raspberry Pi.
 
-Run synth.py in one Terminal tab. This plays audio.
+## Setup
 
-Run control.py in another Terminal tab. This lets you control the pitch.
+Run `python3 -m pip install -r requirements.txt`
 
-Change pitch: drag slider.
+## Usage
 
-Change sound: in the window opened by synth.py, click on the interpreter text
-box, and enter looper.setTable(SndTable('synth2.wav')) or looper.setTable(SndTable('synth.wav')).
-
-
-In synth.py there are three types of sounds, continuous, single, and repeating.
-Uncomment each one (comment the other two out) and make sure they work. The single sound
-does not change pitch (you would have to manually replay the sound with pitch shifted).
-The repeating sound does change pitch but not from user input (see note_changes()).
-
+1. On the Pi, first run `python3 sensor.py reset` to set up the sensors properly.
+2. Make `fbcp` and run `./fbcp &` to run the framebuffer copy program in the background.
+3. On the host system, run `python3 synth.py`. Also make note of the host system's IP address.
+4. On the Pi, run `python3 gui.py host_ip` where host_ip is replaced with the host system's IP.
+5. Have fun!!
