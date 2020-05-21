@@ -177,8 +177,8 @@ beat = get_beat(bpm=bpm)
 
 def loop(num_beats=8):
     duration = 60 / bpm * num_beats
-    # s.recstart('rec_temp.wav')
-    s.recstart()
+    s.recstart('rec_temp.wav')
+    # s.recstart()
     print('Started recording!')
     t = threading.Timer(duration, handle_loop, args=(duration,))
     t.start()
@@ -187,7 +187,7 @@ def loop(num_beats=8):
 def handle_loop(duration):
     print('Stopped recording.')
     s.recstop()
-    # os.rename('rec_temp.wav', 'rec.wav')
+    os.rename('rec_temp.wav', 'rec.wav')
     # loop_table.setTable(SndTable('rec.wav'))  # reload file
     loop_table.setTable(SndTable(os.path.join(
         os.path.expanduser('~'), 'pyo_rec.wav')))  # reload file
