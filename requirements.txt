@@ -6,7 +6,7 @@ Kivy==1.11.1
 Kivy-Garden==0.1.4
 numpy==1.18.4
 Pillow==8.1.1
-Pygments==2.6.1
+Pygments==2.7.4
 pyo==1.0.1
 requests==2.23.0
 six==1.14.0
