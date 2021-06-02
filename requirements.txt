@@ -10,5 +10,5 @@ Pygments==2.7.4
 pyo==1.0.1
 requests==2.23.0
 six==1.14.0
-urllib3==1.25.9
+urllib3==1.26.5
 wxPython==4.1.0
