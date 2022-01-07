@@ -7,7 +7,7 @@ Kivy-Garden==0.1.4
 numpy==1.18.4
 Pillow==8.3.2
 Pygments==2.7.4
-pyo==1.0.1
+pyo==1.0.3
 requests==2.23.0
 six==1.14.0
 urllib3==1.26.5
